@@ -1,0 +1,1 @@
+const E={PRODUCTS:"/products",CART_ITEMS:"/cart-items",QUANTITY_TO_CHANGE:R=>`/cart-items/${R}`,DELETE_ITEMS:R=>`/cart-items/${R}`},I={CART_ITEMS:"cartItems",PRICE_INFO:"priceInfo",ORDER_INFO:"orderInfo"},r={MAIN:"",ORDER_INFO:"/order-info",ADMIN:"/admin",ERROR:"/error"},t={SHIPPING_FEE:3e3,SHIPPING_FREE_PRICE:1e5};export{E as A,t as O,I as R,r as a};

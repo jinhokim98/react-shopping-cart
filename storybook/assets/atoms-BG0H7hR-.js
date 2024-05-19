@@ -1,0 +1,1 @@
+import{R as c}from"./index-efxvOAgQ.js";import{R as o}from"./constants-COjtpt9k.js";const f=e=>({setSelf:r,onSet:a})=>{const t=localStorage.getItem(e);t!==null&&r(JSON.parse(t)),a((l,m,s)=>s?localStorage.removeItem(e):localStorage.setItem(e,JSON.stringify(l)))},n=c({key:o.CART_ITEMS,default:[],effects:[f(o.CART_ITEMS)]});export{n as s};
