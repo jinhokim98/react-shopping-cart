@@ -1,4 +1,4 @@
-import{C as d}from"./Checkbox-BXgcN7v8.js";import"./styled-components.browser.esm-C_jzoV4G.js";import"./index-l2PZgWEW.js";const l={title:"Checkbox",component:d},e={args:{id:1,isChecked:!1,onChange:()=>console.log("sdf")}},o={args:{id:2,isChecked:!0,onChange:()=>console.log("sdf")}};var s,r,a;e.parameters={...e.parameters,docs:{...(s=e.parameters)==null?void 0:s.docs,source:{originalSource:`{
+import{C as d}from"./Checkbox-rHLiScLQ.js";import"./styled-components.browser.esm-C_jzoV4G.js";import"./index-l2PZgWEW.js";const l={title:"Checkbox",component:d},e={args:{id:1,isChecked:!1,onChange:()=>console.log("sdf")}},o={args:{id:2,isChecked:!0,onChange:()=>console.log("sdf")}};var s,r,a;e.parameters={...e.parameters,docs:{...(s=e.parameters)==null?void 0:s.docs,source:{originalSource:`{
   args: {
     id: 1,
     isChecked: false,

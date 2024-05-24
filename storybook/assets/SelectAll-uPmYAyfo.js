@@ -1,4 +1,4 @@
-import{p as n,j as t}from"./styled-components.browser.esm-C_jzoV4G.js";import{C as s}from"./Checkbox-BXgcN7v8.js";const i=n.div`
+import{p as n,j as t}from"./styled-components.browser.esm-C_jzoV4G.js";import{C as s}from"./Checkbox-rHLiScLQ.js";const i=n.div`
   display: flex;
   align-items: center;
   gap: 0.8rem;
