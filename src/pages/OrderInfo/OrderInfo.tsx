@@ -1,22 +1,25 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as S from './styled';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 
 import { CartItem } from '@type/cartItem';
 import { ROUTER_URLS } from '@constants/constants';
-import { discountAmountStore, selectedCoupons } from '@recoil/atoms';
-import { priceInfoStore } from '@recoil/selectors';
-import useOrderItems from '@api/post/orderItems';
+import { discountAmountStore } from '@recoil/atoms';
 
 import {
   ShoppingCartItemView,
-  IsolatedRegionShippingFee,
   Coupon,
+  IsolatedRegionShippingFee,
   PaymentTotalWithDiscount,
 } from '@components/OrderInfo';
 import ShoppingCartDescription from '@components/serviceCommon/ShoppingCartDescription/ShoppingCartDescription';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import useMutation from '@hooks/useMutation';
+import orderItems from '@api/post/orderItems';
+import usePriceInfo from './../../hooks/usePriceInfo';
+import useIsolatedRegion from '@hooks/useIsolatedRegion';
+import useCoupon from '@hooks/coupon/useCoupon';
 
 interface OrderInfoState {
   orderItems: CartItem[];
@@ -28,20 +31,32 @@ interface OrderInfoState {
 const OrderInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { orderItems, isPending } = useOrderItems();
-  const resetCoupons = useResetRecoilState(selectedCoupons);
+  const { isolatedRegion, handleIsolatedRegion } = useIsolatedRegion();
+  const priceInfo = usePriceInfo(isolatedRegion);
+  const couponLogic = useCoupon(isolatedRegion);
+
+  const { mutate: orderItemsMutate, isPending } = useMutation<typeof orderItems>(orderItems, {
+    onSuccess: () => {
+      navigate(ROUTER_URLS.PAYMENT_INFO, { state: paymentInfo });
+    },
+    onError: () => alert('결제 실패! 관리자에게 문의하세요.'),
+  });
+
+  const onOrder = async () => {
+    await orderItemsMutate(cartItemIds);
+  };
+
   const resetDiscount = useResetRecoilState(discountAmountStore);
   const orderInfo = location.state as OrderInfoState | null;
-  const totalPrice = useRecoilValue(priceInfoStore).total;
+  const totalPrice = priceInfo.total;
 
   useEffect(() => {
     if (orderInfo === undefined) navigate(ROUTER_URLS.ERROR);
 
     return () => {
       resetDiscount();
-      resetCoupons();
     };
-  }, [navigate, orderInfo, resetCoupons, resetDiscount]);
+  }, [navigate, orderInfo, resetDiscount]);
 
   const orderInfoNotNull = orderInfo as OrderInfoState;
   const cartItemIds = orderInfoNotNull.orderItems.map(item => item.id);
@@ -61,15 +76,14 @@ const OrderInfo = () => {
 최종 결제 금액을 확인해 주세요.`}
         />
         {orderInfo?.orderItems.map(item => <ShoppingCartItemView key={item.id} cartItem={item} />)}
-        <Coupon />
-        <IsolatedRegionShippingFee />
-        <PaymentTotalWithDiscount />
+        <Coupon isolatedRegion={isolatedRegion} {...couponLogic} />
+        <IsolatedRegionShippingFee
+          isolatedRegion={isolatedRegion}
+          handleIsolatedRegion={handleIsolatedRegion}
+        />
+        <PaymentTotalWithDiscount priceInfo={priceInfo} coupons={couponLogic.couponDetail} />
       </S.Container>
-      <FloatingButton
-        label="결제하기"
-        onClick={() => orderItems(cartItemIds, paymentInfo)}
-        disabled={isPending}
-      />
+      <FloatingButton label="결제하기" onClick={onOrder} disabled={isPending} />
     </>
   );
 };

@@ -1,13 +1,19 @@
 import info from '@assets/info.svg';
 import * as S from './styled';
 import { useRecoilValue } from 'recoil';
-import { priceInfoStore } from '@recoil/selectors';
 import { discountAmountStore } from '@recoil/atoms';
 import { ORDER } from '@constants/constants';
 import PriceInfo from '@components/serviceCommon/PriceInfo/PriceInfo';
+import { IPriceInfo } from '@type/priceInfo';
+import { Coupon } from '@type/coupon';
+import CouponInfo from '../Coupon/CouponInfo/CouponInfo';
 
-const PaymentTotalWithDiscount = () => {
-  const priceInfo = useRecoilValue(priceInfoStore);
+interface PaymentTotalWithDiscountProps {
+  priceInfo: IPriceInfo;
+  coupons: Coupon[];
+}
+
+const PaymentTotalWithDiscount = ({ priceInfo, coupons }: PaymentTotalWithDiscountProps) => {
   const discountAmount = useRecoilValue(discountAmountStore);
 
   return (
@@ -18,7 +24,12 @@ const PaymentTotalWithDiscount = () => {
       </S.Info>
       <S.Hr />
       <PriceInfo title="주문 금액" price={priceInfo.order} />
-      <PriceInfo title="쿠폰 할인 금액" price={discountAmount === 0 ? 0 : -discountAmount} />
+      {coupons.length > 0 && <CouponInfo coupons={coupons} />}
+      <PriceInfo
+        title="쿠폰 할인 금액"
+        price={discountAmount === 0 ? 0 : -discountAmount}
+        accent={discountAmount !== 0}
+      />
       <PriceInfo title="배송비" price={priceInfo.shipping} />
       <S.Hr />
       <PriceInfo title="총 결제 금액" price={priceInfo.total} />

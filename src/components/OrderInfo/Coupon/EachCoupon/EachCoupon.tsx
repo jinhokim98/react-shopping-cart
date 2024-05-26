@@ -1,23 +1,48 @@
 import * as S from './styled';
-import { Coupon } from '@type/coupon';
-import { useApplicable } from '@hooks/coupon/index';
+import { Coupon, FixedCoupon, FreeShippingCoupon, PercentageCoupon } from '@type/coupon';
 import Checkbox from '@components/common/Checkbox/Checkbox';
+import useApplicableCoupon from '@hooks/coupon/useApplicableCoupon';
+import dayjs from '@utils/dayjs';
 
 interface EachCouponProps {
   coupon: Coupon;
   isSelect: boolean;
-  isAlreadyApplyingTwoCoupons: boolean;
+  isAlreadyApplyingMaximumCoupons: boolean;
   changeApplying: (coupon: Coupon) => void;
 }
 
 const EachCoupon = ({
   coupon,
   isSelect,
-  isAlreadyApplyingTwoCoupons,
+  isAlreadyApplyingMaximumCoupons,
   changeApplying,
 }: EachCouponProps) => {
-  const { isApplicable } = useApplicable();
-  const disabled = !isApplicable(coupon) || (isAlreadyApplyingTwoCoupons && !isSelect);
+  const { isApplicable } = useApplicableCoupon(dayjs());
+  const disabled = !isApplicable(coupon) || (isAlreadyApplyingMaximumCoupons && !isSelect);
+
+  const PercentageCouponAvailableTime = (coupon: Coupon) => {
+    if (coupon.discountType !== 'percentage') return null;
+
+    const percentageCoupon = coupon as PercentageCoupon;
+    return (
+      <S.CouponCondition>
+        사용 가능 시간:
+        {`${percentageCoupon.availableTime.start}부터 ${percentageCoupon.availableTime.end}까지`}
+      </S.CouponCondition>
+    );
+  };
+
+  const MinimumAmount = (coupon: Coupon) => {
+    if (coupon.discountType === 'buyXgetY') return null;
+    if (coupon.discountType === 'percentage') return null;
+
+    const minimumAmountCoupon = coupon as FixedCoupon | FreeShippingCoupon;
+    return (
+      <S.CouponCondition>
+        최소 주문 금액: {minimumAmountCoupon.minimumAmount.toLocaleString()}원
+      </S.CouponCondition>
+    );
+  };
 
   return (
     <S.Container>
@@ -33,16 +58,8 @@ const EachCoupon = ({
       </S.Header>
       <S.Contents $disabled={disabled}>
         <S.CouponCondition>만료일: {coupon.expirationDate}</S.CouponCondition>
-        {coupon.availableTime && (
-          <S.CouponCondition>
-            사용 가능 시간: {`${coupon.availableTime.start}부터 ${coupon.availableTime.end}까지`}
-          </S.CouponCondition>
-        )}
-        {coupon.minimumAmount && (
-          <S.CouponCondition>
-            최소 주문 금액: {coupon.minimumAmount.toLocaleString()}원
-          </S.CouponCondition>
-        )}
+        {PercentageCouponAvailableTime(coupon)}
+        {MinimumAmount(coupon)}
       </S.Contents>
     </S.Container>
   );

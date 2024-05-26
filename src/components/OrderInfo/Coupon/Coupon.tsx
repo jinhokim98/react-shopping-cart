@@ -1,38 +1,38 @@
 import { Modal } from 'cookie-nice-modal';
 import { useReducer } from 'react';
-import { useSetRecoilState } from 'recoil';
 import * as S from './styled';
 import EachCoupon from './EachCoupon/EachCoupon';
 import { Coupon as CouponType } from '@type/coupon';
 
-import {
-  useLoadCoupon,
-  useExpirationDate,
-  useApplyCoupons,
-  useDiscount,
-} from '@hooks/coupon/index';
-import { discountAmountStore } from '@recoil/atoms';
+interface CouponProps {
+  isolatedRegion: boolean;
+  notExpiredCoupon: CouponType[];
+  applyingCoupons: CouponType[];
+  changeApplying: (coupon: CouponType) => void;
+  isSelected: (coupon: CouponType) => boolean;
+  isAlreadyApplyingMaximumCoupons: boolean;
+  discountAmount: number;
+  handleDiscountAmount: (discount: number) => void;
+  handleCouponDetail: (coupons: CouponType[]) => void;
+}
 
-const Coupon = () => {
+const Coupon = ({
+  notExpiredCoupon,
+  applyingCoupons,
+  changeApplying,
+  handleCouponDetail,
+  isSelected,
+  isAlreadyApplyingMaximumCoupons,
+  discountAmount,
+  handleDiscountAmount,
+}: CouponProps) => {
   const [couponModalOpen, toggleCouponModalOpen] = useReducer(prev => !prev, false);
-  const coupons = useLoadCoupon();
-  const { isExpired } = useExpirationDate();
-  const notExpiredCoupon = coupons.filter(coupon => !isExpired(coupon.expirationDate));
-  const { applyingCoupons, changeApplying } = useApplyCoupons();
-  const { discountAmount } = useDiscount();
-
-  const setDiscountAmountStore = useSetRecoilState(discountAmountStore);
-
-  const isSelect = (coupon: CouponType) => {
-    return applyingCoupons.find(applying => applying.id === coupon.id) !== undefined;
-  };
 
   const applyCouponAndCloseModal = () => {
-    setDiscountAmountStore(discountAmount);
+    handleCouponDetail(applyingCoupons);
+    handleDiscountAmount(discountAmount);
     toggleCouponModalOpen();
   };
-
-  const isAlreadyApplyingTwoCoupons = applyingCoupons.length >= 2;
 
   return (
     <>
@@ -43,9 +43,9 @@ const Coupon = () => {
           {notExpiredCoupon.map(coupon => (
             <EachCoupon
               key={coupon.id}
-              isSelect={isSelect(coupon)}
+              isSelect={isSelected(coupon)}
               coupon={coupon}
-              isAlreadyApplyingTwoCoupons={isAlreadyApplyingTwoCoupons}
+              isAlreadyApplyingMaximumCoupons={isAlreadyApplyingMaximumCoupons}
               changeApplying={changeApplying}
             />
           ))}

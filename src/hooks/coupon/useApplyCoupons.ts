@@ -1,9 +1,9 @@
-import { useRecoilState } from 'recoil';
-import { selectedCoupons } from '@recoil/atoms';
 import { Coupon } from '@type/coupon';
+import { useState } from 'react';
 
 const useApplyCoupons = () => {
-  const [applyingCoupons, setApplyingCoupons] = useRecoilState(selectedCoupons);
+  const [applyingCoupons, setApplyingCoupons] = useState<Coupon[]>([]);
+  const isAlreadyApplyingMaximumCoupons = applyingCoupons.length >= 2;
 
   const changeApplying = (coupon: Coupon) => {
     const alreadyExist = applyingCoupons.find(applying => applying.id === coupon.id) !== undefined;
@@ -15,9 +15,15 @@ const useApplyCoupons = () => {
     }
   };
 
+  const isSelected = (coupon: Coupon) => {
+    return applyingCoupons.find(applying => applying.id === coupon.id) !== undefined;
+  };
+
   return {
     applyingCoupons,
     changeApplying,
+    isSelected,
+    isAlreadyApplyingMaximumCoupons,
   };
 };
 
