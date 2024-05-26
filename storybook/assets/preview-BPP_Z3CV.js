@@ -1,4 +1,4 @@
-import{c as s,h as r,j as n,n as d}from"./styled-components.browser.esm-C_jzoV4G.js";import{c}from"./index-D5ptoTbw.js";import"./index-l2PZgWEW.js";import"./index-BXzUGxBp.js";var a=function(e,t){return Object.defineProperty?Object.defineProperty(e,"raw",{value:t}):e.raw=t,e},l=s(o||(o=a([`
+import{c as s,h as r,j as n,n as d}from"./styled-components.browser.esm-C_jzoV4G.js";import{a as c}from"./index-C--EFurk.js";import"./index-l2PZgWEW.js";import"./index-BXzUGxBp.js";var a=function(e,t){return Object.defineProperty?Object.defineProperty(e,"raw",{value:t}):e.raw=t,e},l=s(o||(o=a([`
 /* http://meyerweb.com/eric/tools/css/reset/
    v5.0.1 | 20191019
    License: none (public domain)
@@ -139,4 +139,4 @@ table {
       font-size: 1.6rem;
       font-weight: 700;
       line-height: 1.6rem;
-    `},color:{black:"#000000",white:"#ffffff",lightGray:"#BEBEBE",lightGray2:"#33333340",lightGray3:"#333333BF",lightGray4:"#333333",black10:"#0000001A"}},g={parameters:{controls:{matchers:{color:/(background|color)$/i,date:/Date$/i}}}},y=[e=>n.jsxs(d,{theme:m,children:[n.jsx(b,{}),n.jsx(c,{children:n.jsx(e,{})})]})];export{y as decorators,g as default};
+    `},color:{black:"#000000",white:"#ffffff",lightGray:"#BEBEBE",lightGray2:"#33333340",lightGray3:"#333333BF",lightGray4:"#333333",black10:"#0000001A",lightOrange:"#FEEFEA",orange:"#FF5F1F"}},g={parameters:{controls:{matchers:{color:/(background|color)$/i,date:/Date$/i}}}},y=[e=>n.jsxs(d,{theme:m,children:[n.jsx(b,{}),n.jsx(c,{children:n.jsx(e,{})})]})];export{y as decorators,g as default};
